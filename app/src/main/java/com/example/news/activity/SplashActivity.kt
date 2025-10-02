@@ -1,4 +1,4 @@
-package com.example.news
+package com.example.news.activity
 
 import android.content.Intent
 import android.content.Context
@@ -9,6 +9,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.news.MainActivity
+import com.example.news.R
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

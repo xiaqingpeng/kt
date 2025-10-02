@@ -10,6 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.example.news.fragment.HomeFragment
+import com.example.news.fragment.ProfileFragment
+import com.example.news.fragment.ScaleFragment
+import com.example.news.fragment.ShopFragment
+import com.example.news.fragment.TrendsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
