@@ -1,6 +1,7 @@
 package com.example.news.fragment
 
 import android.os.Bundle
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -77,12 +78,18 @@ class ProfileFragment : Fragment() {
         view.findViewById<View>(R.id.btnNotification).setOnClickListener {
             // 跳转到通知页面
             showMessage("跳转到通知页面")
+            // 跳转到通知页面
+            val intent = Intent(requireContext(), com.example.news.activity.NotificationActivity::class.java)
+            startActivity(intent)
         }
 
         // 我的会员按钮
         view.findViewById<View>(R.id.btnMyMembership).setOnClickListener {
             // 跳转到会员页面
             showMessage("跳转到会员页面")
+            // 跳转到会员页面
+            val intent = Intent(requireContext(), com.example.news.activity.MembershipActivity::class.java)
+            startActivity(intent)
         }
 
         // 设置各个功能项的点击事件

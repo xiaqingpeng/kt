@@ -23,6 +23,14 @@
         <activity
             android:name=".MainActivity"
             android:exported="false" />
+                    <activity
+            android:name=".activity.NotificationActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".activity.MembershipActivity"
+            android:exported="false"
+            android:parentActivityName=".MainActivity" />
     </application>
 
 </manifest>
