@@ -115,7 +115,10 @@ class ProfileFragment : Fragment() {
             "商城" -> showMessage("进入商城")
             "设备管理" -> showMessage("设备管理")
             "设备消息" -> showMessage("设备消息")
-            "关于有品" -> showMessage("关于有品")
+            "关于有品" -> {
+            val intent = Intent(requireContext(), com.example.news.activity.AboutActivity::class.java)
+            startActivity(intent)
+            }
             "帮助与反馈" -> showMessage("帮助与反馈")
             "有品实验室" -> showMessage("有品实验室")
         }
