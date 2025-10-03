@@ -78,7 +78,6 @@ class ProfileFragment : Fragment() {
         view.findViewById<View>(R.id.btnNotification).setOnClickListener {
             // 跳转到通知页面
             showMessage("跳转到通知页面")
-            // 跳转到通知页面
             val intent = Intent(requireContext(), com.example.news.activity.NotificationActivity::class.java)
             startActivity(intent)
         }
@@ -87,7 +86,6 @@ class ProfileFragment : Fragment() {
         view.findViewById<View>(R.id.btnMyMembership).setOnClickListener {
             // 跳转到会员页面
             showMessage("跳转到会员页面")
-            // 跳转到会员页面
             val intent = Intent(requireContext(), com.example.news.activity.MembershipActivity::class.java)
             startActivity(intent)
         }
@@ -113,11 +111,15 @@ class ProfileFragment : Fragment() {
             "饮食" -> showMessage("饮食记录")
             "健康测评" -> showMessage("健康测评")
             "商城" -> showMessage("进入商城")
-            "设备管理" -> showMessage("设备管理")
+            "设备管理" -> {
+                // 跳转到设备管理页面
+                val intent = Intent(requireContext(), com.example.news.activity.DeviceManageActivity::class.java)
+                startActivity(intent)
+            }
             "设备消息" -> showMessage("设备消息")
             "关于有品" -> {
-            val intent = Intent(requireContext(), com.example.news.activity.AboutActivity::class.java)
-            startActivity(intent)
+                val intent = Intent(requireContext(), com.example.news.activity.AboutActivity::class.java)
+                startActivity(intent)
             }
             "帮助与反馈" -> showMessage("帮助与反馈")
             "有品实验室" -> showMessage("有品实验室")
