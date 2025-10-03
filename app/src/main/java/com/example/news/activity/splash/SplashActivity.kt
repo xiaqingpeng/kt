@@ -1,4 +1,4 @@
-package com.example.news.activity
+package com.example.news.activity.splash
 
 import android.content.Intent
 import android.content.Context
@@ -21,10 +21,10 @@ class SplashActivity : AppCompatActivity() {
         val isFirstLaunch = sharedPreferences.getBoolean("is_first_launch", true)
         
         // 如果不是首次启动，直接跳转到MainActivity
-        if (!isFirstLaunch) {
-            startMainActivity()
-            return
-        }
+//        if (!isFirstLaunch) {
+//            startMainActivity()
+//            return
+//        }
         
         // 标记为非首次启动
         sharedPreferences.edit().putBoolean("is_first_launch", false).apply()

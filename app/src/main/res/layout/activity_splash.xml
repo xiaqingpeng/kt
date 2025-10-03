@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="新闻应用"
+        android:text="PICOOC"
         android:textColor="@color/white"
         android:textSize="36sp"
         android:textStyle="bold"

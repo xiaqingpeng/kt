@@ -43,9 +43,12 @@ class HomeFragment : BaseFragment() {
             return
         }
 
-        // 设置 TabLayout 属性（可选）
+        // 设置 TabLayout 属性
         tabLayout.tabMode = TabLayout.MODE_SCROLLABLE
         tabLayout.isTabIndicatorFullWidth = false
+
+        // 为 TabLayout 设置内容描述，解决可访问性警告
+        tabLayout.contentDescription = "首页导航标签"
     }
 
     /**
@@ -68,7 +71,10 @@ class HomeFragment : BaseFragment() {
      */
     private fun setupTabLayoutWithViewPager() {
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.text = tabTitles[position]
+            val title = tabTitles[position]
+            tab.text = title
+            // 关键修复：为每个 Tab 设置内容描述，解决可访问性警告
+            tab.contentDescription = "${title}标签"
         }.attach()
     }
 
@@ -76,7 +82,6 @@ class HomeFragment : BaseFragment() {
      * 设置监听器
      */
     override fun setListeners() {
-        // 可以在这里添加其他监听器
         setupTabSelectedListener()
     }
 
@@ -88,7 +93,10 @@ class HomeFragment : BaseFragment() {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 // Tab 被选中时的处理
                 tab?.let {
-                    // 可以在这里处理选中状态的变化
+                    safeRun {
+                        // 为屏幕阅读器提供反馈
+                        it.view.announceForAccessibility("已选择${it.text}")
+                    }
                 }
             }
 
@@ -98,6 +106,11 @@ class HomeFragment : BaseFragment() {
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
                 // Tab 重新选中时的处理（快速点击同一个 Tab）
+                tab?.let {
+                    safeRun {
+                        showToast("当前已在${it.text}页面")
+                    }
+                }
             }
         })
     }
@@ -119,8 +132,8 @@ class HomeFragment : BaseFragment() {
                 super.onPageSelected(position)
                 // 页面切换时的处理
                 safeRun {
-                    // 移除 toast 提示，避免频繁打扰用户
-                     showToast("切换到: ${tabTitles[position]}")
+                    // 移除频繁的 toast 提示，避免打扰用户
+                    // showToast("切换到: ${tabTitles[position]}")
 
                     // 可以在这里执行其他页面切换逻辑
                     handlePageChange(position)
@@ -130,6 +143,17 @@ class HomeFragment : BaseFragment() {
             override fun onPageScrollStateChanged(state: Int) {
                 super.onPageScrollStateChanged(state)
                 // 页面滚动状态变化的处理
+                when (state) {
+                    ViewPager2.SCROLL_STATE_DRAGGING -> {
+                        // 用户开始拖动
+                    }
+                    ViewPager2.SCROLL_STATE_SETTLING -> {
+                        // 页面正在 settling
+                    }
+                    ViewPager2.SCROLL_STATE_IDLE -> {
+                        // 滚动结束
+                    }
+                }
             }
 
             override fun onPageScrolled(
@@ -150,21 +174,61 @@ class HomeFragment : BaseFragment() {
         // 根据页面位置执行不同的逻辑
         when (position) {
             0 -> {
-                // 首页逻辑
+                // 首页逻辑 - 可以加载首页数据
+                loadHomeData()
             }
             1 -> {
-                // 燃烧营逻辑
+                // 燃烧营逻辑 - 可以加载燃烧营数据
+                loadBurnCampData()
             }
             2 -> {
-                // 饮食逻辑
+                // 饮食逻辑 - 可以加载饮食数据
+                loadDietData()
             }
             3 -> {
-                // 智慧减脂逻辑
+                // 智慧减脂逻辑 - 可以加载智慧减脂数据
+                loadSmartWeightLossData()
             }
             4 -> {
-                // 饮食小课逻辑
+                // 饮食小课逻辑 - 可以加载饮食小课数据
+                loadDietCourseData()
             }
         }
+    }
+
+    /**
+     * 加载首页数据
+     */
+    private fun loadHomeData() {
+        // 实现首页数据加载逻辑
+    }
+
+    /**
+     * 加载燃烧营数据
+     */
+    private fun loadBurnCampData() {
+        // 实现燃烧营数据加载逻辑
+    }
+
+    /**
+     * 加载饮食数据
+     */
+    private fun loadDietData() {
+        // 实现饮食数据加载逻辑
+    }
+
+    /**
+     * 加载智慧减脂数据
+     */
+    private fun loadSmartWeightLossData() {
+        // 实现智慧减脂数据加载逻辑
+    }
+
+    /**
+     * 加载饮食小课数据
+     */
+    private fun loadDietCourseData() {
+        // 实现饮食小课数据加载逻辑
     }
 
     /**
@@ -191,8 +255,15 @@ class HomeFragment : BaseFragment() {
             // 更新适配器数据
             adapter.updateData(newTitles)
 
-            // 如果需要同时更新 TabLayout 的标题，需要重新创建 TabLayoutMediator
-            // 或者通过其他方式更新 Tab 文本
+            // 重新设置 Tab 内容描述
+            for (i in 0 until tabLayout.tabCount) {
+                val tab = tabLayout.getTabAt(i)
+                if (i < newTitles.size) {
+                    val title = newTitles[i]
+                    tab?.text = title
+                    tab?.contentDescription = "${title}标签"
+                }
+            }
         }
     }
 
@@ -202,6 +273,24 @@ class HomeFragment : BaseFragment() {
     fun setViewPagerScrollable(scrollable: Boolean) {
         if (::viewPager.isInitialized) {
             viewPager.isUserInputEnabled = scrollable
+        }
+    }
+
+    /**
+     * 获取当前页面标题
+     */
+    fun getCurrentPageTitle(): String {
+        val position = getCurrentPagePosition()
+        return if (position in tabTitles.indices) tabTitles[position] else ""
+    }
+
+    /**
+     * 刷新当前页面数据
+     */
+    fun refreshCurrentPage() {
+        safeRun {
+            val currentPosition = getCurrentPagePosition()
+            handlePageChange(currentPosition)
         }
     }
 
