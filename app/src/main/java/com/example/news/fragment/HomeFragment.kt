@@ -120,7 +120,7 @@ class HomeFragment : BaseFragment() {
                 // 页面切换时的处理
                 safeRun {
                     // 移除 toast 提示，避免频繁打扰用户
-                    // showToast("切换到: ${tabTitles[position]}")
+                     showToast("切换到: ${tabTitles[position]}")
 
                     // 可以在这里执行其他页面切换逻辑
                     handlePageChange(position)
