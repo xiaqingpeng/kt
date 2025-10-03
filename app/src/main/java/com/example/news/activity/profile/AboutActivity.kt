@@ -1,4 +1,4 @@
-package com.example.news.activity
+package com.example.news.activity.profile
 
 import android.content.Intent
 import android.net.Uri

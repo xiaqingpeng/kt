@@ -26,19 +26,19 @@
             android:name=".MainActivity"
             android:exported="false" />
                     <activity
-            android:name=".activity.NotificationActivity"
+            android:name=".activity.profile.NotificationActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".activity.MembershipActivity"
+            android:name=".activity.profile.MembershipActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".activity.AboutActivity"
+            android:name=".activity.profile.AboutActivity"
             android:exported="false"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".activity.DeviceManageActivity"
+            android:name=".activity.profile.DeviceManageActivity"
             android:exported="false"
           
             android:parentActivityName=".MainActivity" />

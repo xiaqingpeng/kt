@@ -1,16 +1,13 @@
-package com.example.news.activity
+package com.example.news.activity.profile
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.news.R
+import com.example.news.activity.base.BaseActivity
 
-class DeviceManageActivity : AppCompatActivity() {
+class DeviceManageActivity : BaseActivity() {
 
     private lateinit var toolbar: Toolbar
     private lateinit var btnScanQrCode: Button
@@ -20,44 +17,44 @@ class DeviceManageActivity : AppCompatActivity() {
         private const val REQUEST_CODE_SCAN = 1001
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_device_manage)
-
-
-
-        initView()
-        setClickListeners()
+    /**
+     * 获取布局资源ID
+     */
+    override fun getLayoutResId(): Int {
+        return R.layout.activity_device_manage
     }
 
-    private fun initView() {
+    /**
+     * 初始化视图
+     */
+    override fun initView() {
         // 初始化 Toolbar
         toolbar = findViewById(R.id.toolbar)
-        setSupportActionBar(toolbar)
-
-        // 显示返回按钮和设置标题
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
-        supportActionBar?.title = "设备管理" // 这里设置标题
+        setupToolbar(toolbar, "设备管理", true)
 
         btnScanQrCode = findViewById(R.id.btnScanQrCode)
         btnAddDevice = findViewById(R.id.btnAddDevice)
     }
 
-    private fun setClickListeners() {
+    /**
+     * 设置监听器
+     */
+    override fun setListeners() {
         btnScanQrCode.setOnClickListener {
             startQrCodeScan()
         }
 
         btnAddDevice.setOnClickListener {
             // 手动添加设备
-            Toast.makeText(this, "手动添加设备", Toast.LENGTH_SHORT).show()
+            showToast("手动添加设备")
         }
+    }
 
-        // Toolbar 返回按钮点击事件
-        toolbar.setNavigationOnClickListener {
-            onBackPressed()
-        }
+    /**
+     * 观察数据变化（可根据需要实现）
+     */
+    override fun observeData() {
+        // 这里可以添加LiveData观察等
     }
 
     private fun startQrCodeScan() {
@@ -68,7 +65,7 @@ class DeviceManageActivity : AppCompatActivity() {
             startActivityForResult(intent, REQUEST_CODE_SCAN)
         } catch (e: Exception) {
             // 如果设备上没有安装二维码扫描应用，提示用户
-            Toast.makeText(this, "请安装二维码扫描应用", Toast.LENGTH_SHORT).show()
+            showLongToast("请安装二维码扫描应用")
 
             // 或者使用内置的扫描功能
             // startInternalQrCodeScan()
@@ -91,15 +88,11 @@ class DeviceManageActivity : AppCompatActivity() {
 
     private fun processScanResult(qrContent: String) {
         // 解析二维码内容并添加设备
-        Toast.makeText(this, "扫描到设备二维码: $qrContent", Toast.LENGTH_SHORT).show()
+        showToast("扫描到设备二维码: $qrContent")
 
         // 这里可以添加设备绑定逻辑
         // bindDevice(qrContent)
     }
 
-    // 支持物理返回键
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return true
-    }
+    // 支持物理返回键（BaseActivity 中已经处理了 Toolbar 返回按钮）
 }
