@@ -6,16 +6,14 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.news.R
+import com.example.news.adapter.base.BaseAdapter
 
-class TabPagerAdapter(private val tabTitles: List<String>) : 
-    RecyclerView.Adapter<TabPagerAdapter.TabViewHolder>() {
+class TabPagerAdapter(tabTitles: List<String>) :
+    BaseAdapter<String, TabPagerAdapter.TabViewHolder>() {
 
-    inner class TabViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val contentText: TextView = view.findViewById(R.id.tabContentText)
-        
-        fun bind(title: String) {
-            contentText.text = "$title 的内容"
-        }
+    init {
+        // 在初始化时设置数据
+        updateData(tabTitles)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TabViewHolder {
@@ -25,8 +23,15 @@ class TabPagerAdapter(private val tabTitles: List<String>) :
     }
 
     override fun onBindViewHolder(holder: TabViewHolder, position: Int) {
-        holder.bind(tabTitles[position])
+        // 使用基类的 getItem 方法获取数据
+        holder.bind(getItem(position))
     }
 
-    override fun getItemCount(): Int = tabTitles.size
+    inner class TabViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val contentText: TextView = view.findViewById(R.id.tabContentText)
+
+        fun bind(title: String) {
+            contentText.text = "$title 的内容"
+        }
+    }
 }

@@ -1,18 +1,15 @@
 package com.example.news.fragment
 
-import android.os.Bundle
 import android.content.Intent
-import android.util.Log
-import android.view.LayoutInflater
+import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
-import androidx.fragment.app.Fragment
 import com.example.news.R
+import com.example.news.fragment.base.BaseFragment
+import com.example.news.model.FunctionItem
 
-class ProfileFragment : Fragment() {
+class ProfileFragment : BaseFragment() {
 
     private val functionItems = mapOf(
         // 我的功能区
@@ -40,97 +37,190 @@ class ProfileFragment : Fragment() {
         R.id.itemLab to FunctionItem("有品实验室", android.R.drawable.ic_menu_set_as)
     )
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_profile, container, false)
-        initView(view)
+    /**
+     * 获取布局资源ID
+     */
+    override fun getLayoutResId(): Int {
+        return R.layout.fragment_profile
+    }
+
+    /**
+     * 初始化视图
+     */
+    override fun initView(view: View) {
+        setupUserInfo(view)
         setupFunctionItems(view)
-        setClickListeners(view)
-        return view
     }
 
-    private fun initView(view: View) {
-        // 初始化用户信息
-        val tvNickname = view.findViewById<TextView>(R.id.tvNickname)
-        val tvMembership = view.findViewById<TextView>(R.id.tvMembership)
-
-        // 这里可以从用户数据中设置真实信息
-        tvNickname.text = "健身达人"
-        tvMembership.text = getString(R.string.membership_expire_time, "2024-12-31")
+    /**
+     * 设置监听器
+     */
+    override fun setListeners() {
+        setupClickListeners()
     }
 
-    private fun setupFunctionItems(view: View) {
-        functionItems.forEach { (viewId, functionItem) ->
-            val itemView = view.findViewById<View>(viewId)
-            val ivIcon = itemView.findViewById<ImageView>(R.id.ivIcon)
-            val tvTitle = itemView.findViewById<TextView>(R.id.tvTitle)
+    /**
+     * 观察数据变化
+     */
+    override fun observeData() {
+        // 可以在这里添加用户数据观察
+        // 例如：viewModel.userData.observe(viewLifecycleOwner) { user -> updateUserInfo(user) }
+    }
 
-            ivIcon.setImageResource(functionItem.iconRes)
-            tvTitle.text = functionItem.title
+    /**
+     * 设置用户信息
+     */
+    private fun setupUserInfo(view: View) {
+        safeRun {
+            val tvNickname = view.findViewByIdOrNull<TextView>(R.id.tvNickname)
+            val tvMembership = view.findViewByIdOrNull<TextView>(R.id.tvMembership)
+
+            tvNickname?.text = "健身达人"
+            tvMembership?.text = getString(R.string.membership_expire_time, "2024-12-31")
         }
     }
 
-    private fun setClickListeners(view: View) {
-        // 通知按钮
-        view.findViewById<View>(R.id.btnNotification).setOnClickListener {
-            // 跳转到通知页面
-            showMessage("跳转到通知页面")
+    /**
+     * 设置功能项
+     */
+    private fun setupFunctionItems(view: View) {
+        functionItems.forEach { (viewId, functionItem) ->
+            safeRun {
+                val itemView = view.findViewByIdOrNull<View>(viewId) ?: return@safeRun
+                val ivIcon = itemView.findViewByIdOrNull<ImageView>(R.id.ivIcon)
+                val tvTitle = itemView.findViewByIdOrNull<TextView>(R.id.tvTitle)
+
+                ivIcon?.setImageResource(functionItem.iconRes)
+                tvTitle?.text = functionItem.title
+            }
+        }
+    }
+
+    /**
+     * 设置点击监听器
+     */
+    private fun setupClickListeners() {
+        safeRun {
+            val view = view ?: return@safeRun
+
+            // 通知按钮
+            view.findViewByIdOrNull<View>(R.id.btnNotification)?.setOnClickListener {
+                navigateToNotification()
+            }
+
+            // 我的会员按钮
+            view.findViewByIdOrNull<View>(R.id.btnMyMembership)?.setOnClickListener {
+                navigateToMembership()
+            }
+
+            // 设置各个功能项的点击事件
+            functionItems.forEach { (viewId, functionItem) ->
+                view.findViewByIdOrNull<View>(viewId)?.setOnClickListener {
+                    onFunctionItemClick(functionItem)
+                }
+            }
+        }
+    }
+
+    /**
+     * 导航到通知页面
+     */
+    private fun navigateToNotification() {
+        safeRun {
+            showToast("跳转到通知页面")
             val intent = Intent(requireContext(), com.example.news.activity.profile.NotificationActivity::class.java)
             startActivity(intent)
         }
+    }
 
-        // 我的会员按钮
-        view.findViewById<View>(R.id.btnMyMembership).setOnClickListener {
-            // 跳转到会员页面
-            showMessage("跳转到会员页面")
+    /**
+     * 导航到会员页面
+     */
+    private fun navigateToMembership() {
+        safeRun {
+            showToast("跳转到会员页面")
             val intent = Intent(requireContext(), com.example.news.activity.profile.MembershipActivity::class.java)
             startActivity(intent)
         }
-
-        // 设置各个功能项的点击事件
-        functionItems.forEach { (viewId, functionItem) ->
-            view.findViewById<View>(viewId).setOnClickListener {
-                onFunctionItemClick(functionItem)
-            }
-        }
     }
 
+    /**
+     * 功能项点击处理
+     */
     private fun onFunctionItemClick(functionItem: FunctionItem) {
-        when (functionItem.title) {
-            "目标" -> showMessage("进入目标设置")
-            "体围" -> showMessage("查看体围数据")
-            "运动能力" -> showMessage("运动能力评估")
-            "月度报告" -> showMessage("查看月度报告")
-            "亲密好友" -> showMessage("好友列表")
-            "卡券" -> showMessage("我的卡券")
-            "燃烧营" -> showMessage("进入燃烧营")
-            "食谱" -> showMessage("查看食谱")
-            "饮食" -> showMessage("饮食记录")
-            "健康测评" -> showMessage("健康测评")
-            "商城" -> showMessage("进入商城")
-            "设备管理" -> {
-                // 跳转到设备管理页面
-                val intent = Intent(requireContext(), com.example.news.activity.profile.DeviceManageActivity::class.java)
-                startActivity(intent)
+        safeRun {
+            when (functionItem.title) {
+                "目标" -> showToast("进入目标设置")
+                "体围" -> showToast("查看体围数据")
+                "运动能力" -> showToast("运动能力评估")
+                "月度报告" -> showToast("查看月度报告")
+                "亲密好友" -> showToast("好友列表")
+                "卡券" -> showToast("我的卡券")
+                "燃烧营" -> showToast("进入燃烧营")
+                "食谱" -> showToast("查看食谱")
+                "饮食" -> showToast("饮食记录")
+                "健康测评" -> showToast("健康测评")
+                "商城" -> showToast("进入商城")
+                "设备管理" -> navigateToDeviceManage()
+                "设备消息" -> showToast("设备消息")
+                "关于有品" -> navigateToAbout()
+                "帮助与反馈" -> showToast("帮助与反馈")
+                "有品实验室" -> showToast("有品实验室")
             }
-            "设备消息" -> showMessage("设备消息")
-            "关于有品" -> {
-                val intent = Intent(requireContext(), com.example.news.activity.profile.AboutActivity::class.java)
-                startActivity(intent)
-            }
-            "帮助与反馈" -> showMessage("帮助与反馈")
-            "有品实验室" -> showMessage("有品实验室")
         }
     }
 
-    private fun showMessage(message: String) {
-        // 这里可以使用 Toast 或 Snackbar 显示消息
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-        Log.d("ProfileFragment", message)
+    /**
+     * 导航到设备管理页面
+     */
+    private fun navigateToDeviceManage() {
+        val intent = Intent(requireContext(), com.example.news.activity.profile.DeviceManageActivity::class.java)
+        startActivity(intent)
     }
 
-    data class FunctionItem(val title: String, val iconRes: Int)
+    /**
+     * 导航到关于页面
+     */
+    private fun navigateToAbout() {
+        val intent = Intent(requireContext(), com.example.news.activity.profile.AboutActivity::class.java)
+        startActivity(intent)
+    }
+
+    /**
+     * 更新用户信息（可用于数据观察回调）
+     */
+    private fun updateUserInfo(nickname: String, membershipExpire: String) {
+        safeRun {
+            view?.findViewByIdOrNull<TextView>(R.id.tvNickname)?.text = nickname
+            view?.findViewByIdOrNull<TextView>(R.id.tvMembership)?.text =
+                getString(R.string.membership_expire_time, membershipExpire)
+        }
+    }
+
+    /**
+     * 动态更新功能项（可选）
+     */
+    fun updateFunctionItem(itemId: Int, newFunctionItem: FunctionItem) {
+        safeRun {
+            val itemView = view?.findViewByIdOrNull<View>(itemId) ?: return@safeRun
+            val ivIcon = itemView.findViewByIdOrNull<ImageView>(R.id.ivIcon)
+            val tvTitle = itemView.findViewByIdOrNull<TextView>(R.id.tvTitle)
+
+            ivIcon?.setImageResource(newFunctionItem.iconRes)
+            tvTitle?.text = newFunctionItem.title
+        }
+    }
+
+    companion object {
+        /**
+         * 创建新的 ProfileFragment 实例
+         */
+        fun newInstance(): ProfileFragment {
+            return ProfileFragment().apply {
+                arguments = Bundle().apply {
+                    // 可以在这里传递参数
+                }
+            }
+        }
+    }
 }

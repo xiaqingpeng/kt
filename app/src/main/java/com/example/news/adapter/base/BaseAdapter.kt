@@ -3,7 +3,10 @@ package com.example.news.adapter.base
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-abstract class BaseAdapter<T, VH : BaseViewHolder<T>> : RecyclerView.Adapter<VH>() {
+/**
+ * 基础的 Adapter 类
+ */
+abstract class BaseAdapter<T, VH : RecyclerView.ViewHolder> : RecyclerView.Adapter<VH>() {
 
     protected val items = mutableListOf<T>()
 
@@ -15,10 +18,7 @@ abstract class BaseAdapter<T, VH : BaseViewHolder<T>> : RecyclerView.Adapter<VH>
     /**
      * 绑定数据到 ViewHolder
      */
-    override fun onBindViewHolder(holder: VH, position: Int) {
-        val item = items[position]
-        holder.bindData(item)
-    }
+    override abstract fun onBindViewHolder(holder: VH, position: Int)
 
     /**
      * 更新所有数据
@@ -27,6 +27,13 @@ abstract class BaseAdapter<T, VH : BaseViewHolder<T>> : RecyclerView.Adapter<VH>
         items.clear()
         items.addAll(newItems)
         notifyDataSetChanged()
+    }
+
+    /**
+     * 提交列表数据（兼容 ListAdapter 的命名）
+     */
+    fun submitList(newItems: List<T>) {
+        updateData(newItems)
     }
 
     /**
@@ -66,5 +73,13 @@ abstract class BaseAdapter<T, VH : BaseViewHolder<T>> : RecyclerView.Adapter<VH>
      */
     fun getItem(position: Int): T {
         return items[position]
+    }
+
+    /**
+     * 清空所有数据
+     */
+    fun clear() {
+        items.clear()
+        notifyDataSetChanged()
     }
 }
