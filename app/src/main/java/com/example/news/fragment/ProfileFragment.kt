@@ -1,6 +1,5 @@
 package com.example.news.fragment
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -123,25 +122,30 @@ class ProfileFragment : BaseFragment() {
     }
 
     /**
-     * 导航到通知页面
+     * 导航到通知页面 - 使用基类路由方法
      */
     private fun navigateToNotification() {
-        safeRun {
-            showToast("跳转到通知页面")
-            val intent = Intent(requireContext(), com.example.news.activity.profile.NotificationActivity::class.java)
-            startActivity(intent)
-        }
+        showToast("跳转到通知页面")
+        // 使用基类的 navigateTo 方法
+        navigateTo(com.example.news.activity.profile.NotificationActivity::class.java)
     }
 
     /**
-     * 导航到会员页面
+     * 导航到会员页面 - 使用基类路由方法
      */
     private fun navigateToMembership() {
-        safeRun {
-            showToast("跳转到会员页面")
-            val intent = Intent(requireContext(), com.example.news.activity.profile.MembershipActivity::class.java)
-            startActivity(intent)
+//        showToast("跳转到会员页面")
+
+        val tvNickname = view?.findViewByIdOrNull<TextView>(R.id.tvNickname)
+
+        val bundle = Bundle().apply {
+            putString("user_id", "12345")
+            putString("user_name", tvNickname?.text.toString())
         }
+        // 使用基类的 navigateToWithExtras 方法
+        navigateToWithExtras(
+            com.example.news.activity.profile.MembershipActivity::class.java, bundle
+        )
     }
 
     /**
@@ -171,19 +175,19 @@ class ProfileFragment : BaseFragment() {
     }
 
     /**
-     * 导航到设备管理页面
+     * 导航到设备管理页面 - 使用基类路由方法
      */
     private fun navigateToDeviceManage() {
-        val intent = Intent(requireContext(), com.example.news.activity.profile.DeviceManageActivity::class.java)
-        startActivity(intent)
+        // 使用基类的 navigateTo 方法
+        navigateTo(com.example.news.activity.profile.DeviceManageActivity::class.java)
     }
 
     /**
-     * 导航到关于页面
+     * 导航到关于页面 - 使用基类路由方法
      */
     private fun navigateToAbout() {
-        val intent = Intent(requireContext(), com.example.news.activity.profile.AboutActivity::class.java)
-        startActivity(intent)
+        // 使用基类的 navigateTo 方法
+        navigateTo(com.example.news.activity.profile.AboutActivity::class.java)
     }
 
     /**

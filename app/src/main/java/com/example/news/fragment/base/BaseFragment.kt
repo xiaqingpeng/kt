@@ -1,6 +1,7 @@
 package com.example.news.fragment.base
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -128,5 +129,83 @@ abstract class BaseFragment : Fragment() {
      */
     protected fun isFragmentVisible(): Boolean {
         return isAdded && !isHidden && userVisibleHint
+    }
+
+    /**
+     * ==================== 路由跳转方法 ====================
+     */
+
+    /**
+     * 导航到其他Activity
+     */
+    protected fun navigateTo(clazz: Class<*>) {
+        safeRun {
+            startActivity(Intent(requireContext(), clazz))
+        }
+    }
+
+    /**
+     * 导航到其他Activity并传递数据
+     */
+    protected fun navigateToWithExtras(clazz: Class<*>, extras: Bundle) {
+        safeRun {
+            val intent = Intent(requireContext(), clazz)
+            intent.putExtras(extras)
+            startActivity(intent)
+        }
+    }
+
+    /**
+     * 导航到其他Activity并传递字符串数据
+     */
+    protected fun navigateToWithString(clazz: Class<*>, key: String, value: String) {
+        safeRun {
+            val intent = Intent(requireContext(), clazz)
+            intent.putExtra(key, value)
+            startActivity(intent)
+        }
+    }
+
+    /**
+     * 导航到其他Activity并传递整型数据
+     */
+    protected fun navigateToWithInt(clazz: Class<*>, key: String, value: Int) {
+        safeRun {
+            val intent = Intent(requireContext(), clazz)
+            intent.putExtra(key, value)
+            startActivity(intent)
+        }
+    }
+
+    /**
+     * 导航到其他Activity并清除任务栈
+     */
+    protected fun navigateToClearTask(clazz: Class<*>) {
+        safeRun {
+            val intent = Intent(requireContext(), clazz)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+        }
+    }
+
+    /**
+     * 导航到其他Activity并等待结果
+     */
+    protected fun navigateForResult(clazz: Class<*>, requestCode: Int) {
+        safeRun {
+            val intent = Intent(requireContext(), clazz)
+            startActivityForResult(intent, requestCode)
+        }
+    }
+
+    /**
+     * 带数据导航到其他Activity并等待结果
+     */
+    protected fun navigateForResultWithExtras(clazz: Class<*>, requestCode: Int, extras: Bundle) {
+        safeRun {
+            val intent = Intent(requireContext(), clazz)
+            intent.putExtras(extras)
+            startActivityForResult(intent, requestCode)
+        }
     }
 }
