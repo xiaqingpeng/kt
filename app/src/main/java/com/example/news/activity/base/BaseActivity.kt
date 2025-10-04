@@ -2,6 +2,7 @@ package com.example.news.activity.base
 
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -77,6 +78,18 @@ abstract class BaseActivity : AppCompatActivity() {
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
             supportActionBar?.setDisplayShowHomeEnabled(true)
             toolbar.setNavigationOnClickListener { onBackPressed() }
+        }
+    }
+
+    /**
+     * 打开网页
+     */
+    protected open fun openWebPage(url: String) {
+        try {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            startActivity(intent)
+        } catch (e: Exception) {
+            showToast("无法打开网页")
         }
     }
 
