@@ -7,8 +7,13 @@ import android.widget.TextView
 import com.example.news.R
 import com.example.news.fragment.base.BaseFragment
 import com.example.news.model.FunctionItem
+import kotlin.math.max
 
 class ProfileFragment : BaseFragment() {
+
+    private var tvNotificationBadge: TextView? = null
+    private var currentBadgeCount = 0
+
 
     private val functionItems = mapOf(
         // 我的功能区
@@ -49,6 +54,7 @@ class ProfileFragment : BaseFragment() {
     override fun initView(view: View) {
         setupUserInfo(view)
         setupFunctionItems(view)
+        setupNotificationBadge(view)
     }
 
     /**
@@ -65,6 +71,70 @@ class ProfileFragment : BaseFragment() {
         // 可以在这里添加用户数据观察
         // 例如：viewModel.userData.observe(viewLifecycleOwner) { user -> updateUserInfo(user) }
     }
+
+    /**
+     * 设置通知徽章
+     */
+    private fun setupNotificationBadge(view: View) {
+        safeRun {
+            tvNotificationBadge = view.findViewByIdOrNull(R.id.tvNotificationBadge)
+            // 初始化时显示测试数据，实际应用中从服务器或本地数据库获取
+            updateNotificationBadge(3) // 示例：显示3条未读消息
+        }
+    }
+
+    /**
+     * 更新通知徽章
+     * @param count 未读消息数量，0表示隐藏徽章
+     */
+    fun updateNotificationBadge(count: Int) {
+        safeRun {
+            currentBadgeCount = count
+            when {
+                count <= 0 -> {
+                    tvNotificationBadge?.visibility = View.GONE
+                }
+                count > 99 -> {
+                    tvNotificationBadge?.visibility = View.VISIBLE
+                    tvNotificationBadge?.text = "99+"
+                }
+                else -> {
+                    tvNotificationBadge?.visibility = View.VISIBLE
+                    tvNotificationBadge?.text = count.toString()
+                }
+            }
+        }
+    }
+
+    /**
+     * 增加通知徽章计数
+     */
+    fun incrementNotificationBadge() {
+        updateNotificationBadge(currentBadgeCount + 1)
+    }
+
+    /**
+     * 减少通知徽章计数
+     */
+    fun decrementNotificationBadge() {
+        val newCount = max(0, currentBadgeCount - 1)
+        updateNotificationBadge(newCount)
+    }
+
+    /**
+     * 清除通知徽章
+     */
+    fun clearNotificationBadge() {
+        updateNotificationBadge(0)
+    }
+
+    /**
+     * 获取当前徽章计数
+     */
+    fun getCurrentBadgeCount(): Int {
+        return currentBadgeCount
+    }
+
 
     /**
      * 设置用户信息
