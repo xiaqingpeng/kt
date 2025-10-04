@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
@@ -27,10 +28,10 @@
             android:layout_weight="1"
             android:hint="搜索商品"
             app:boxBackgroundMode="outline"
-            app:boxCornerRadiusTopEnd="20dp"
-            app:boxCornerRadiusTopStart="20dp"
             app:boxCornerRadiusBottomEnd="20dp"
             app:boxCornerRadiusBottomStart="20dp"
+            app:boxCornerRadiusTopEnd="20dp"
+            app:boxCornerRadiusTopStart="20dp"
             app:boxStrokeColor="@color/primary_color"
             app:hintTextColor="@color/text_secondary">
 
@@ -56,19 +57,20 @@
             android:layout_height="24dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
+            android:contentDescription="消息"
             android:focusable="true"
             android:padding="4dp"
-            android:src="@drawable/ic_message"
-            android:contentDescription="消息" />
+            android:src="@drawable/ic_message" />
 
     </LinearLayout>
 
-    <!-- 轮播图容器 -->
+    <!-- 轮播图容器 - 添加顶部约束并增加上边距 -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bannerContainer"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/topBar">
@@ -76,27 +78,29 @@
         <!-- ViewPager2 轮播图 -->
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPagerBanner"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="16dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:clipChildren="false"
             android:clipToPadding="false"
-            android:clipChildren="false" />
+            android:overScrollMode="never"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <!-- 指示器容器 -->
         <LinearLayout
             android:id="@+id/indicatorContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
             android:gravity="center"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="@id/viewPagerBanner"
             app:layout_constraintEnd_toEndOf="@id/viewPagerBanner"
-            app:layout_constraintStart_toStartOf="@id/viewPagerBanner"
-            app:layout_constraintTop_toBottomOf="@id/viewPagerBanner"
-            app:layout_constraintVertical_bias="0.8" />
+            app:layout_constraintStart_toStartOf="@id/viewPagerBanner" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     <!-- 商品列表区域 -->
     <androidx.recyclerview.widget.RecyclerView
