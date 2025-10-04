@@ -1,51 +1,76 @@
 package com.example.news.activity.splash
 
-import android.content.Intent
-import android.content.Context
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.news.MainActivity
 import com.example.news.R
+import com.example.news.activity.base.BaseActivity
+import androidx.core.content.edit
 
-class SplashActivity : AppCompatActivity() {
+@SuppressLint("CustomSplashScreen")
+class SplashActivity : BaseActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        
-        // 检查是否是首次启动
-        val sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-        val isFirstLaunch = sharedPreferences.getBoolean("is_first_launch", true)
-        
-        // 如果不是首次启动，直接跳转到MainActivity
-//        if (!isFirstLaunch) {
-//            startMainActivity()
-//            return
-//        }
-        
-        // 标记为非首次启动
-        sharedPreferences.edit().putBoolean("is_first_launch", false).apply()
-        
-        // 显示启动页
+        // 在调用父类 onCreate 之前启用边缘到边缘
         enableEdgeToEdge()
-        setContentView(R.layout.activity_splash)
+        super.onCreate(savedInstanceState)
+    }
+
+    /** 获取布局资源ID */
+    override fun getLayoutResId(): Int {
+        return R.layout.activity_splash
+    }
+
+    /** 初始化视图 */
+    override fun initView() {
+        setupWindowInsets()
+        checkFirstLaunch()
+    }
+
+    /** 设置监听器 */
+    override fun setListeners() {
+        // 启动页通常不需要设置监听器
+    }
+
+    /** 观察数据变化 */
+    override fun observeData() {
+        // 启动页通常不需要观察数据
+    }
+
+    private fun setupWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.splash_container)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+    }
+
+    private fun checkFirstLaunch() {
+        val sharedPreferences = getSharedPreferences("app_prefs", MODE_PRIVATE)
+        val isFirstLaunch = sharedPreferences.getBoolean("is_first_launch", true)
+
+        // 如果不是首次启动，直接跳转到MainActivity
+//        if (!isFirstLaunch) {
+//            startMainActivity()
+//            return
+//        }
+
+        // 标记为非首次启动
+        sharedPreferences.edit { putBoolean("is_first_launch", false) }
 
         // 延迟2秒后跳转到主页面
         Handler(Looper.getMainLooper()).postDelayed({
             startMainActivity()
         }, 2000)
     }
-    
+
     private fun startMainActivity() {
-        startActivity(Intent(this, MainActivity::class.java))
+        navigateTo(MainActivity::class.java)
         finish()
     }
 }

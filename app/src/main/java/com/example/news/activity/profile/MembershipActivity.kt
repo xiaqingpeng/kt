@@ -20,56 +20,44 @@ class MembershipActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         setupWindowInsets()
         setupToolbar()
         setupMembershipInfo()
         setupButtons()
-
-
     }
 
-    /**
-     * 获取布局资源ID
-     */
+    /** 获取布局资源ID */
     override fun getLayoutResId(): Int {
         return R.layout.activity_membership
     }
 
-    /**
-     * 初始化视图
-     */
+    /** 初始化视图 */
     override fun initView() {
 
         // 获取传递的参数
         getIntentExtras()
 
-
         setupWindowInsets()
         setupToolbar()
 
         setupMembershipInfo()
         setupButtons()
-
     }
 
-
-    /**
-     * 获取 Intent 传递的参数
-     */
+    /** 获取 Intent 传递的参数 */
     private fun getIntentExtras() {
         // 方式1：通过 intent.extras 获取 Bundle
-//        val extras = intent.extras
-//        userId = extras?.getString("user_id")
-//        userName = extras?.getString("user_name")
+        //        val extras = intent.extras
+        //        userId = extras?.getString("user_id")
+        //        userName = extras?.getString("user_name")
 
         // 方式2：直接通过 intent 获取参数（推荐）
         userId = intent.getStringExtra("user_id")
         userName = intent.getStringExtra("user_name")
 
         // 方式3：使用安全的方式获取，提供默认值
-//        userId = intent.getStringExtra("user_id") ?: "未知用户"
-//        userName = intent.getStringExtra("user_name") ?: "健身达人"
+        //        userId = intent.getStringExtra("user_id") ?: "未知用户"
+        //        userName = intent.getStringExtra("user_name") ?: "健身达人"
 
         // 打印参数用于调试
         println("用户ID: $userId, 用户名: $userName")
@@ -77,7 +65,7 @@ class MembershipActivity : BaseActivity() {
 
     private fun setupWindowInsets() {
         val appBarLayout =
-            findViewById<com.google.android.material.appbar.AppBarLayout>(R.id.appBarLayout)
+                findViewById<com.google.android.material.appbar.AppBarLayout>(R.id.appBarLayout)
         ViewCompat.setOnApplyWindowInsetsListener(appBarLayout) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(0, systemBars.top, 0, 0)
@@ -137,7 +125,6 @@ class MembershipActivity : BaseActivity() {
                 finish()
                 true
             }
-
             else -> super.onOptionsItemSelected(item)
         }
     }
