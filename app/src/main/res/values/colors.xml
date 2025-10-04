@@ -6,4 +6,12 @@
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="light_gray">#F5F5F5</color>
+    
+    <!-- 商城界面颜色 -->
+    <color name="primary_color">#FF6B35</color>
+    <color name="text_primary">#333333</color>
+    <color name="text_secondary">#666666</color>
+    <color name="background_light">#FAFAFA</color>
+    <color name="indicator_selected">#FF6B35</color>
+    <color name="indicator_unselected">#CCCCCC</color>
 </resources>
