@@ -8,34 +8,44 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.viewbinding.ViewBinding
 
 /**
- * 增强版 BaseActivity
+ * 增强版 BaseActivity - 基础功能层
  * 包含权限处理、通用功能等
  */
-abstract class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
+
+    protected lateinit var binding: VB
 
     private var permissionCallback: ((Boolean) -> Unit)? = null
     private var requestCode = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(getLayoutResId())
+        binding = getViewBinding()
+        setContentView(binding.root)
 
         initView()
         setListeners()
         observeData()
+        initData()
     }
 
     /**
-     * 获取布局资源ID
+     * 获取 ViewBinding
      */
-    abstract fun getLayoutResId(): Int
+    protected abstract fun getViewBinding(): VB
 
     /**
      * 初始化视图
      */
     protected open fun initView() {}
+
+    /**
+     * 初始化数据
+     */
+    protected open fun initData() {}
 
     /**
      * 设置监听器
@@ -64,8 +74,24 @@ abstract class BaseActivity : AppCompatActivity() {
     /**
      * 导航到其他Activity
      */
-    protected fun navigateTo(clazz: Class<*>) {
+    protected fun navigateTo(clazz: Class<*>, finishCurrent: Boolean = false) {
         startActivity(Intent(this, clazz))
+        if (finishCurrent) {
+            finish()
+        }
+    }
+
+    /**
+     * 导航并传递数据
+     */
+    protected fun <T> navigateToWithData(clazz: Class<*>, key: String, data: T, finishCurrent: Boolean = false) {
+        val intent = Intent(this, clazz).apply {
+            putExtra(key, data as? java.io.Serializable)
+        }
+        startActivity(intent)
+        if (finishCurrent) {
+            finish()
+        }
     }
 
     /**
@@ -94,7 +120,7 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     /**
-     * 检查权限
+     * 检查单个权限
      */
     protected fun checkPermission(permission: String, callback: (Boolean) -> Unit) {
         if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED) {
@@ -103,6 +129,23 @@ abstract class BaseActivity : AppCompatActivity() {
             permissionCallback = callback
             requestCode++
             ActivityCompat.requestPermissions(this, arrayOf(permission), requestCode)
+        }
+    }
+
+    /**
+     * 检查多个权限
+     */
+    protected fun checkMultiplePermissions(permissions: Array<String>, callback: (Boolean) -> Unit) {
+        val deniedPermissions = permissions.filter {
+            ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
+        }
+
+        if (deniedPermissions.isEmpty()) {
+            callback(true)
+        } else {
+            permissionCallback = callback
+            requestCode++
+            ActivityCompat.requestPermissions(this, deniedPermissions.toTypedArray(), requestCode)
         }
     }
 
@@ -116,17 +159,17 @@ abstract class BaseActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == this.requestCode) {
-            val granted = grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED
+            val granted = grantResults.all { it == PackageManager.PERMISSION_GRANTED }
             permissionCallback?.invoke(granted)
             permissionCallback = null
         }
     }
 
     /**
-     * 显示加载对话框（需要子类实现或使用第三方库）
+     * 显示加载对话框
      */
-    protected open fun showLoading() {
-        // 实现加载对话框
+    protected open fun showLoading(message: String = "加载中...") {
+        // 实现加载对话框 - 可以使用 ProgressDialog 或自定义 Dialog
     }
 
     /**
@@ -134,5 +177,14 @@ abstract class BaseActivity : AppCompatActivity() {
      */
     protected open fun hideLoading() {
         // 隐藏加载对话框
+    }
+
+    /**
+     * 安全执行操作（避免在 onDestroy 后执行 UI 操作）
+     */
+    protected fun safeRunOnUiThread(action: () -> Unit) {
+        if (!isFinishing && !isDestroyed) {
+            runOnUiThread(action)
+        }
     }
 }

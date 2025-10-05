@@ -10,20 +10,20 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.news.MainActivity
 import com.example.news.R
 import com.example.news.activity.base.BaseActivity
+import com.example.news.databinding.ActivitySplashBinding
 import androidx.core.content.edit
 
 @SuppressLint("CustomSplashScreen")
-class SplashActivity : BaseActivity() {
+class SplashActivity : BaseActivity<ActivitySplashBinding>() {
+
+    override fun getViewBinding(): ActivitySplashBinding {
+        return ActivitySplashBinding.inflate(layoutInflater)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // 在调用父类 onCreate 之前启用边缘到边缘
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-    }
-
-    /** 获取布局资源ID */
-    override fun getLayoutResId(): Int {
-        return R.layout.activity_splash
     }
 
     /** 初始化视图 */
@@ -43,7 +43,7 @@ class SplashActivity : BaseActivity() {
     }
 
     private fun setupWindowInsets() {
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.splash_container)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.splashContainer) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets

@@ -3,20 +3,27 @@ package com.example.news.activity.profile
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.news.R
-import com.example.news.activity.base.BaseActivity
+import com.example.news.activity.base.BaseTitleActivity
 import com.example.news.adapter.NotificationAdapter
+import com.example.news.databinding.ActivityNotificationBinding
 import com.example.news.model.NotificationItem
 
-class NotificationActivity : BaseActivity() {
+class NotificationActivity : BaseTitleActivity<ActivityNotificationBinding>() {
 
-    private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: NotificationAdapter
+
+    override fun getViewBinding(): ActivityNotificationBinding {
+        return ActivityNotificationBinding.inflate(layoutInflater)
+    }
+
+    override fun getToolbar() = binding.toolbar
+
+    override fun getToolbarTitle(): String {
+        return "通知"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
@@ -24,18 +31,11 @@ class NotificationActivity : BaseActivity() {
     }
 
     /**
-     * 获取布局资源ID
-     */
-    override fun getLayoutResId(): Int {
-        return R.layout.activity_notification
-    }
-
-    /**
      * 初始化视图
      */
     override fun initView() {
+        super.initView() // 这会自动调用 BaseTitleActivity 的 setupToolbar()
         setupWindowInsets()
-        setupToolbar()
         setupRecyclerView()
         loadNotifications()
     }
@@ -57,24 +57,17 @@ class NotificationActivity : BaseActivity() {
     }
 
     private fun setupWindowInsets() {
-        val appBarLayout = findViewById<com.google.android.material.appbar.AppBarLayout>(R.id.appBarLayout)
-        ViewCompat.setOnApplyWindowInsetsListener(appBarLayout) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.appBarLayout) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(0, systemBars.top, 0, 0)
             insets
         }
     }
 
-    private fun setupToolbar() {
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setupToolbar(toolbar, "通知", true)
-    }
-
     private fun setupRecyclerView() {
-        recyclerView = findViewById(R.id.recyclerViewNotifications)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        binding.recyclerViewNotifications.layoutManager = LinearLayoutManager(this)
         adapter = NotificationAdapter()
-        recyclerView.adapter = adapter
+        binding.recyclerViewNotifications.adapter = adapter
     }
 
     private fun loadNotifications() {

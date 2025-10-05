@@ -1,50 +1,42 @@
 package com.example.news.activity.profile
 
 import android.content.Intent
-import android.os.Bundle
-import android.widget.Button
-import androidx.appcompat.widget.Toolbar
-import com.example.news.R
-import com.example.news.activity.base.BaseActivity
+import com.example.news.activity.base.BaseTitleActivity
+import com.example.news.databinding.ActivityDeviceManageBinding
 
-class DeviceManageActivity : BaseActivity() {
+class DeviceManageActivity : BaseTitleActivity<ActivityDeviceManageBinding>() {
 
-    private lateinit var toolbar: Toolbar
-    private lateinit var btnScanQrCode: Button
-    private lateinit var btnAddDevice: Button
+    override fun getViewBinding(): ActivityDeviceManageBinding {
+        return ActivityDeviceManageBinding.inflate(layoutInflater)
+    }
+
+    override fun getToolbar() = binding.toolbar
+
+    override fun getToolbarTitle(): String {
+        return "设备管理"
+    }
 
     companion object {
         private const val REQUEST_CODE_SCAN = 1001
     }
 
     /**
-     * 获取布局资源ID
-     */
-    override fun getLayoutResId(): Int {
-        return R.layout.activity_device_manage
-    }
-
-    /**
      * 初始化视图
      */
     override fun initView() {
-        // 初始化 Toolbar
-        toolbar = findViewById(R.id.toolbar)
-        setupToolbar(toolbar, "设备管理", true)
-
-        btnScanQrCode = findViewById(R.id.btnScanQrCode)
-        btnAddDevice = findViewById(R.id.btnAddDevice)
+        super.initView() // 这会自动调用 BaseTitleActivity 的 setupToolbar()
+        // 不需要额外初始化按钮，因为可以直接使用 binding
     }
 
     /**
      * 设置监听器
      */
     override fun setListeners() {
-        btnScanQrCode.setOnClickListener {
+        binding.btnScanQrCode.setOnClickListener {
             startQrCodeScan()
         }
 
-        btnAddDevice.setOnClickListener {
+        binding.btnAddDevice.setOnClickListener {
             // 手动添加设备
             showToast("手动添加设备")
         }
@@ -93,6 +85,4 @@ class DeviceManageActivity : BaseActivity() {
         // 这里可以添加设备绑定逻辑
         // bindDevice(qrContent)
     }
-
-    // 支持物理返回键（BaseActivity 中已经处理了 Toolbar 返回按钮）
 }

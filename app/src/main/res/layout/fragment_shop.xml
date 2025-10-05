@@ -32,8 +32,8 @@
             app:boxCornerRadiusBottomStart="20dp"
             app:boxCornerRadiusTopEnd="20dp"
             app:boxCornerRadiusTopStart="20dp"
-            app:boxStrokeColor="@color/primary_color"
-            app:hintTextColor="@color/text_secondary">
+            app:boxStrokeColor="@color/gradient_start"
+            app:hintTextColor="@color/gray">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etSearch"
