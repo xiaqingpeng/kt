@@ -18,14 +18,14 @@
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             android:fitsSystemWindows="true">
 
-            <com.google.android.material.appbar.MaterialToolbar
+            <!-- 导航栏 -->
+            <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
-                app:titleTextColor="@color/white"
-                app:navigationIcon="@android:drawable/ic_menu_revert"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                android:elevation="4dp" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -194,7 +194,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_marginHorizontal="16dp"
-                    android:src="@android:drawable/ic_menu_share"
+                    android:src="@drawable/ic_wechat"
                     android:contentDescription="@string/wechat_login" />
 
                 <!-- QQ登录 - 使用发送图标 -->
@@ -203,7 +203,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_marginHorizontal="16dp"
-                    android:src="@android:drawable/ic_menu_send"
+                    android:src="@drawable/ic_qq"
                     android:contentDescription="@string/qq_login" />
 
                 <!-- 微博登录 - 使用编辑图标 -->
@@ -212,7 +212,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_marginHorizontal="16dp"
-                    android:src="@android:drawable/ic_menu_edit"
+                    android:src="@drawable/ic_weibo"
                     android:contentDescription="@string/weibo_login" />
 
             </LinearLayout>

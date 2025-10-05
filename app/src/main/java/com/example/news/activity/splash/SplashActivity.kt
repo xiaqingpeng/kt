@@ -118,7 +118,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
      * 导航到登录页面
      */
     private fun navigateToLogin() {
-        navigateTo(LoginRegisterActivity::class.java, true)
+        navigateTo(LoginRegisterActivity::class.java, false)
     }
 
     /**

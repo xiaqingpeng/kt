@@ -36,7 +36,8 @@
                 android:id="@+id/btnAddDevice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="手动添加设备" />
+                android:text="手动添加设备"
+                android:layout_marginBottom="24dp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -44,14 +45,21 @@
                 android:text="已连接设备"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:layout_marginTop="32dp"
                 android:layout_marginBottom="16dp" />
 
-            <!-- 这里可以添加已连接设备的列表 -->
-            <TextView
+            <!-- 设备列表 -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewDevices"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="暂无已连接设备"
+                android:visibility="gone" />
+
+            <!-- 空状态 -->
+            <TextView
+                android:id="@+id/tvNoDevices"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="暂无已连接设备\n\n点击上方按钮扫描二维码添加设备"
                 android:textSize="14sp"
                 android:textColor="#666"
                 android:gravity="center"

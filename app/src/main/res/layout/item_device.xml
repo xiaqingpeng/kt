@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="2dp"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <!-- 设备图标 -->
+        <ImageView
+            android:id="@+id/ivDeviceIcon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@android:drawable/ic_menu_preferences"
+            android:layout_marginEnd="16dp" />
+
+        <!-- 设备信息 -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tvDeviceName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="设备名称"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvDeviceType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="设备类型"
+                    android:textSize="12sp"
+                    android:textColor="#666"
+                    android:src="@android:drawable/ic_menu_info_details"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="2dp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvScanTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="扫描时间"
+                android:textSize="12sp"
+                android:textColor="#999"
+                android:layout_marginTop="4dp" />
+
+            <TextView
+                android:id="@+id/tvQrContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="设备ID"
+                android:textSize="12sp"
+                android:textColor="#666"
+                android:layout_marginTop="2dp" />
+
+        </LinearLayout>
+
+        <!-- 连接状态 -->
+        <ImageView
+            android:id="@+id/ivConnectionStatus"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@android:drawable/ic_secure"
+            android:layout_marginStart="8dp" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
