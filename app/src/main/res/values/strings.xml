@@ -1,4 +1,32 @@
 <resources>
     <string name="app_name">PICOOC</string>
     <string name="membership_expire_time">会员到期时间：%s</string>
+
+    <!-- 登录注册相关 -->
+    <string name="hint_email">邮箱</string>
+    <string name="hint_username">用户名</string>
+    <string name="hint_password">密码</string>
+    <string name="hint_confirm_password">确认密码</string>
+    <string name="login">登录</string>
+    <string name="register">注册</string>
+    <string name="forgot_password">忘记密码？</string>
+    <string name="switch_to_register">还没有账号？立即注册</string>
+    <string name="switch_to_login">已有账号？立即登录</string>
+    <string name="or_login_with">或使用以下方式登录</string>
+    <string name="or_register_with">或使用以下方式注册</string>
+    <string name="wechat_login">微信登录</string>
+    <string name="qq_login">QQ登录</string>
+    <string name="weibo_login">微博登录</string>
+
+    <!-- 消息提示 -->
+    <string name="login_success">登录成功</string>
+    <string name="register_success">注册成功</string>
+    <string name="operation_failed">操作失败，请重试</string>
+    <string name="navigate_to_forgot_password">跳转到忘记密码页面</string>
+    <string name="navigate_to_main">跳转到主页面</string>
+
+    <!-- 工具栏标题 -->
+    <string name="login_title">登录</string>
+    <string name="register_title">注册</string>
+
 </resources>
