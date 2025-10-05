@@ -1,8 +1,14 @@
 package com.example.news.fragment
 
+import android.content.Context
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.viewpager2.widget.ViewPager2
@@ -11,13 +17,15 @@ import com.example.news.adapter.BannerAdapter
 import com.example.news.fragment.base.BaseFragment
 import com.example.news.model.BannerItem
 import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 
 class ShopFragment : BaseFragment() {
 
     private lateinit var viewPagerBanner: ViewPager2
     private lateinit var indicatorContainer: LinearLayout
     private lateinit var etSearch: TextInputEditText
-    private lateinit var ivMessage: ImageView
+    private lateinit var searchInputLayout: TextInputLayout
+    private lateinit var ivCart: ImageView
 
     private lateinit var bannerAdapter: BannerAdapter
     private val bannerHandler = Handler(Looper.getMainLooper())
@@ -51,6 +59,7 @@ class ShopFragment : BaseFragment() {
 
     override fun initView(view: View) {
         initViews(view)
+        setupSearchView()
         setupBanner()
         setupIndicators()
     }
@@ -71,10 +80,103 @@ class ShopFragment : BaseFragment() {
             return
         }
 
-        ivMessage = view.findViewByIdOrNull(R.id.ivMessage) ?: run {
-            showToast("消息图标初始化失败")
+        searchInputLayout = view.findViewByIdOrNull(R.id.searchInputLayout) ?: run {
+            showToast("搜索布局初始化失败")
             return
         }
+
+        ivCart = view.findViewByIdOrNull(R.id.ivCart) ?: run {
+            showToast("购物车图标初始化失败")
+            return
+        }
+    }
+
+    /**
+     * 设置搜索框功能
+     */
+    private fun setupSearchView() {
+        // 设置搜索图标点击监听
+        searchInputLayout.setStartIconOnClickListener {
+            etSearch.requestFocus()
+            showKeyboard()
+            performSearch(etSearch.text.toString())
+        }
+
+        // 设置文本变化监听
+        etSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                // 实时搜索或显示搜索结果
+                s?.let {
+                    if (it.isNotEmpty()) {
+                        performSearch(it.toString())
+                    } else {
+                        // 清空搜索时隐藏搜索结果
+                        clearSearchResults()
+                    }
+                }
+            }
+        })
+
+        // 设置键盘搜索按钮监听
+        etSearch.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                performSearch(etSearch.text.toString())
+                hideKeyboard()
+                return@setOnEditorActionListener true
+            }
+            false
+        }
+
+        // 设置焦点变化监听
+        etSearch.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                // 获得焦点时的动画效果
+                searchInputLayout.boxStrokeColor = resources.getColor(R.color.gradient_start, null)
+            } else {
+                // 失去焦点时恢复默认颜色
+                searchInputLayout.boxStrokeColor = resources.getColor(R.color.gray, null)
+            }
+        }
+    }
+
+    /**
+     * 执行搜索
+     */
+    private fun performSearch(query: String) {
+        if (query.isNotEmpty()) {
+            // 执行搜索逻辑
+            showToast("搜索关键词: $query")
+            // 这里可以添加实际的搜索逻辑，比如请求API、过滤数据等
+        }
+    }
+
+    /**
+     * 清空搜索结果
+     */
+    private fun clearSearchResults() {
+        // 清空搜索结果的逻辑
+        showToast("搜索已清空")
+    }
+
+    /**
+     * 显示键盘
+     */
+    private fun showKeyboard() {
+        etSearch.requestFocus()
+        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(etSearch, InputMethodManager.SHOW_IMPLICIT)
+    }
+
+    /**
+     * 隐藏键盘
+     */
+    private fun hideKeyboard() {
+        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(etSearch.windowToken, 0)
     }
 
     private fun setupBanner() {
@@ -228,14 +330,16 @@ class ShopFragment : BaseFragment() {
     }
 
     override fun setListeners() {
-        // 搜索框点击事件
-        etSearch.setOnClickListener {
-            showToast("点击了搜索框")
+        // 购物车点击事件
+        ivCart.setOnClickListener {
+            showToast("点击了购物车")
+            // 这里可以跳转到购物车页面
         }
 
-        // 消息图标点击事件
-        ivMessage.setOnClickListener {
-            showToast("点击了消息")
+        // 搜索框点击事件（保留原有的点击逻辑）
+        etSearch.setOnClickListener {
+            showToast("点击了搜索框")
+            // 这里可以跳转到搜索页面或展开搜索功能
         }
     }
 
