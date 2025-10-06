@@ -6,8 +6,8 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.news.utils.LoginManager.setLoginState
-import com.example.news.utils.Validator
+import com.example.news.manager.LoginManager.setLoginState
+import com.example.news.manager.ValidatorManager
 
 class LoginRegisterViewModel : ViewModel() {
 
@@ -29,14 +29,14 @@ class LoginRegisterViewModel : ViewModel() {
     val loadingState: LiveData<Boolean> = _loadingState
 
     fun validateForm(isLoginMode: Boolean): Boolean {
-        val emailError =Validator.validateEmail(email)
-        val passwordError = Validator.validatePassword(password)
+        val emailError =ValidatorManager.validateEmail(email)
+        val passwordError = ValidatorManager.validatePassword(password)
         var confirmPasswordError: String? = null
         var usernameError: String? = null
 
         if (!isLoginMode) {
-            confirmPasswordError = Validator.validateConfirmPassword(password, confirmPassword)
-            usernameError = Validator.validateUsername(username)
+            confirmPasswordError = ValidatorManager.validateConfirmPassword(password, confirmPassword)
+            usernameError = ValidatorManager.validateUsername(username)
         }
 
         val isValid = emailError == null &&

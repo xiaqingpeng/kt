@@ -1,8 +1,8 @@
-package com.example.news.utils
+package com.example.news.manager
 
 import android.util.Patterns
 
-object Validator {
+object ValidatorManager {
 
     fun validateEmail(email: String): String? {
         return when {

@@ -11,7 +11,7 @@ import com.example.news.MainActivity
 import com.example.news.activity.auth.LoginRegisterActivity
 import com.example.news.activity.base.BaseActivity
 import com.example.news.databinding.ActivitySplashBinding
-import com.example.news.utils.LoginManager
+import com.example.news.manager.LoginManager
 
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : BaseActivity<ActivitySplashBinding>() {
