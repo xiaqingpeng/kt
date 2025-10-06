@@ -28,5 +28,8 @@
     <!-- 工具栏标题 -->
     <string name="login_title">登录</string>
     <string name="register_title">注册</string>
+    <string name="take_phone">拍照</string>
+    <string name="choose_from_gallery">从相册选择</string>
+    <string name="bottom_sheet_cancel">取消</string>
 
 </resources>

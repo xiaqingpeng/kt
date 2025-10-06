@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- 拍照选项 -->
+    <TextView
+        android:id="@+id/takePhoto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="@string/take_phone"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:background="?android:attr/selectableItemBackground"/>
+
+    <!-- 分割线 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E0E0E0"/>
+
+    <!-- 相册选择选项 -->
+    <TextView
+        android:id="@+id/chooseFromGallery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="@string/choose_from_gallery"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:background="?android:attr/selectableItemBackground"/>
+
+    <!-- 分割线 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="#F5F5F5"/>
+
+    <!-- 取消选项 -->
+    <TextView
+        android:id="@+id/cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="@string/bottom_sheet_cancel"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:textColor="#FF0000"
+        android:background="?android:attr/selectableItemBackground"/>
+
+</LinearLayout>
