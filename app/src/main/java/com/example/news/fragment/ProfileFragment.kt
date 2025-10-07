@@ -84,7 +84,7 @@ class ProfileFragment : BaseFragment() {
 
         // 设置区
         R.id.itemDeviceManage to FunctionItem("设备管理", android.R.drawable.ic_menu_preferences),
-        R.id.itemDeviceMessage to FunctionItem("设备消息", android.R.drawable.ic_menu_info_details),
+        R.id.itemDeviceMessage to FunctionItem("通用设置", android.R.drawable.ic_menu_info_details),
 
         // 有品区
         R.id.itemAbout to FunctionItem("关于有品", android.R.drawable.ic_dialog_info),
@@ -568,7 +568,7 @@ class ProfileFragment : BaseFragment() {
                 "健康测评" -> showToast("健康测评")
                 "商城" -> showToast("进入商城")
                 "设备管理" -> navigateToDeviceManage()
-                "设备消息" -> showToast("设备消息")
+                "通用设置" -> navigateToCustomSetting()
                 "关于有品" -> navigateToAbout()
                 "帮助与反馈" -> showToast("帮助与反馈")
                 "有品实验室" -> showToast("有品实验室")
@@ -581,6 +581,13 @@ class ProfileFragment : BaseFragment() {
      */
     private fun navigateToDeviceManage() {
         navigateTo(com.example.news.activity.profile.DeviceManageActivity::class.java)
+    }
+
+    /**
+     * 导航到通用设置页面
+     */
+    private fun navigateToCustomSetting() {
+        navigateTo(com.example.news.activity.profile.SkinActivity::class.java)
     }
 
     /**
