@@ -32,4 +32,7 @@
     <string name="choose_from_gallery">从相册选择</string>
     <string name="bottom_sheet_cancel">取消</string>
 
+    <string name="app_version">版本 %1$s</string>
+    <string name="record_number">京ICP备12345678号-1</string>
+
 </resources>

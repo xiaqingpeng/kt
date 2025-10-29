@@ -39,8 +39,8 @@ class DeviceManageActivity : BaseTitleActivity<ActivityDeviceManageBinding>() {
 
     override fun setListeners() {
 
-        binding.toolbar.setOnClickListener {
-            onBackPressed();
+        binding.toolbar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
         }
         binding.btnScanQrCode.setOnClickListener {
             startQrCodeScan()

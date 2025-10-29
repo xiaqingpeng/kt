@@ -50,7 +50,7 @@ class LoginRegisterActivity : BaseLogicActivity<ActivityLoginRegisterBinding>() 
             title = getString(R.string.login_title)
         }
         binding.toolbar.setNavigationOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
     }
 
@@ -297,9 +297,5 @@ class LoginRegisterActivity : BaseLogicActivity<ActivityLoginRegisterBinding>() 
         showToast(error?.message ?: getString(R.string.operation_failed))
     }
 
-    companion object {
-        fun newIntent(context: android.content.Context): android.content.Intent {
-            return android.content.Intent(context, LoginRegisterActivity::class.java)
-        }
-    }
+    companion object
 }

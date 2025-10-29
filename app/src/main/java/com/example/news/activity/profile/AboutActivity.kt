@@ -43,8 +43,8 @@ class AboutActivity : BaseTitleActivity<ActivityAboutBinding>() {
     private fun setupViews() {
         // 设置APP名称和版本号
         binding.tvAppName.text = getString(R.string.app_name)
-        binding.tvVersion.text = "版本 ${getAppVersion()}"
-        binding.tvRecordNumber.text = "京ICP备12345678号-1"
+        binding.tvVersion.text = getString(R.string.app_version, getAppVersion())
+        binding.tvRecordNumber.text = getString(R.string.record_number)
 
         // 检查更新
         binding.cardCheckUpdate.setOnClickListener {

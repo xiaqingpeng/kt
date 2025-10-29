@@ -2,12 +2,12 @@ package com.example.news.activity.base
 
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.viewbinding.ViewBinding
 
 /**
@@ -103,7 +103,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
         if (showBackButton) {
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
             supportActionBar?.setDisplayShowHomeEnabled(true)
-            toolbar.setNavigationOnClickListener { onBackPressed() }
+            toolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
         }
     }
 
@@ -112,9 +112,9 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
      */
     protected open fun openWebPage(url: String) {
         try {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            val intent = Intent(Intent.ACTION_VIEW, url.toUri())
             startActivity(intent)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             showToast("无法打开网页")
         }
     }
