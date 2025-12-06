@@ -262,8 +262,8 @@ class LoginRegisterActivity : BaseLogicActivity<ActivityLoginRegisterBinding>() 
     }
 
     private fun navigateToMain() {
-        // 跳转到主页面并关闭当前Activity
-        navigateTo(MainActivity::class.java, finishCurrent = true)
+        // 跳转到主页面并关闭当前Activity，同时清除任务栈
+        navigateTo(MainActivity::class.java, finishCurrent = true, clearTask = true)
     }
 
     private fun performWechatLogin() {

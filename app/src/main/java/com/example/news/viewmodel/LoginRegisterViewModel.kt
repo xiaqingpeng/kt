@@ -10,7 +10,6 @@ import com.example.news.api.AuthResponse
 import com.example.news.api.LoginRequest
 import com.example.news.api.RegisterRequest
 import com.example.news.manager.LoginManager
-import com.example.news.manager.LoginManager.setLoginState
 import com.example.news.manager.ValidatorManager
 import com.example.news.network.RetrofitClient
 import com.example.news.network.TokenStore
@@ -76,35 +75,35 @@ class LoginRegisterViewModel : ViewModel() {
                         // 根据API返回的code判断成功与否，code=0表示成功
                         if (authResponse.code == 0) {
                             // 保存登录状态和用户信息
-                            setLoginState(
+                            LoginManager.setLoginState(
+                                context = context,
                                 isLoggedIn = true,
                                 userId = authResponse.data?.id?.toString() ?: "",
                                 userName = authResponse.data?.username ?: "",
                                 userEmail = authResponse.data?.email ?: "",
                                 userToken = "", // 实际API响应中没有token字段
-                                rememberMe = true,
-                                context = context
+                                rememberMe = true
                             )
                             // 更新TokenStore（实际API响应中没有token字段，这里可以根据需要调整）
                             // TokenStore.setToken("")
-                            _loginResult.value = AuthResult.Success(authResponse)
+                            _loginResult.postValue(AuthResult.Success(authResponse))
                         } else {
-                            _loginResult.value = AuthResult.Error(
+                            _loginResult.postValue(AuthResult.Error(
                                 Exception(authResponse.msg ?: "登录失败")
-                            )
+                            ))
                         }
                     } else {
-                        _loginResult.value = AuthResult.Error(
+                        _loginResult.postValue(AuthResult.Error(
                             Exception("登录失败：服务器返回空响应")
-                        )
+                        ))
                     }
                 } else {
-                    _loginResult.value = AuthResult.Error(
+                    _loginResult.postValue(AuthResult.Error(
                         Exception("登录失败: ${response.code()} ${response.message()}")
-                    )
+                    ))
                 }
             } catch (e: Exception) {
-                _loginResult.value = AuthResult.Error(e)
+                _loginResult.postValue(AuthResult.Error(e))
             } finally {
                 _loadingState.postValue(false)
             }
@@ -124,24 +123,24 @@ class LoginRegisterViewModel : ViewModel() {
                     if (authResponse != null) {
                         // 根据API返回的code判断成功与否，code=0表示成功
                         if (authResponse.code == 0) {
-                            _registerResult.value = AuthResult.Success(authResponse)
+                            _registerResult.postValue(AuthResult.Success(authResponse))
                         } else {
-                            _registerResult.value = AuthResult.Error(
+                            _registerResult.postValue(AuthResult.Error(
                                 Exception(authResponse.msg ?: "注册失败")
-                            )
+                            ))
                         }
                     } else {
-                        _registerResult.value = AuthResult.Error(
+                        _registerResult.postValue(AuthResult.Error(
                             Exception("注册失败：服务器返回空响应")
-                        )
+                        ))
                     }
                 } else {
-                    _registerResult.value = AuthResult.Error(
+                    _registerResult.postValue(AuthResult.Error(
                         Exception("注册失败: ${response.code()} ${response.message()}")
-                    )
+                    ))
                 }
             } catch (e: Exception) {
-                _registerResult.value = AuthResult.Error(e)
+                _registerResult.postValue(AuthResult.Error(e))
             } finally {
                 _loadingState.postValue(false)
             }

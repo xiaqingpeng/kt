@@ -74,8 +74,12 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
     /**
      * 导航到其他Activity
      */
-    protected fun navigateTo(clazz: Class<*>, finishCurrent: Boolean = false) {
-        startActivity(Intent(this, clazz))
+    protected fun navigateTo(clazz: Class<*>, finishCurrent: Boolean = false, clearTask: Boolean = false) {
+        val intent = Intent(this, clazz)
+        if (clearTask) {
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        startActivity(intent)
         if (finishCurrent) {
             finish()
         }

@@ -54,20 +54,20 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
      * 检查应用状态并导航到相应页面
      */
     private fun checkAppStateAndNavigate() {
-        val isFirstLaunch = LoginManager.isFirstLaunch(this)
-        val isLoggedIn = LoginManager.isLoggedIn(this)
-        val isTokenValid = LoginManager.isTokenValid(this)
-
-        // 记录启动信息（用于调试）
-        logAppState(isFirstLaunch, isLoggedIn, isTokenValid)
-
-        // 标记为非首次启动（如果不是首次启动）
-        if (isFirstLaunch) {
-            LoginManager.setNotFirstLaunch(this)
-        }
-
         // 延迟导航，确保启动页显示足够时间
         Handler(Looper.getMainLooper()).postDelayed({
+            val isFirstLaunch = LoginManager.isFirstLaunch(this)
+            val isLoggedIn = LoginManager.isLoggedIn(this)
+            val isTokenValid = LoginManager.isTokenValid(this)
+
+            // 记录启动信息（用于调试）
+            logAppState(isFirstLaunch, isLoggedIn, isTokenValid)
+
+            // 标记为非首次启动（如果不是首次启动）
+            if (isFirstLaunch) {
+                LoginManager.setNotFirstLaunch(this)
+            }
+
             navigateBasedOnState(isFirstLaunch, isLoggedIn, isTokenValid)
         }, SPLASH_DELAY)
     }
@@ -118,7 +118,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
      * 导航到登录页面
      */
     private fun navigateToLogin() {
-        navigateTo(LoginRegisterActivity::class.java, false)
+        navigateTo(LoginRegisterActivity::class.java, true)
     }
 
     /**
