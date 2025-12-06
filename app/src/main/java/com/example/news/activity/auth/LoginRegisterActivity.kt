@@ -124,35 +124,30 @@ class LoginRegisterActivity : BaseLogicActivity<ActivityLoginRegisterBinding>() 
         viewModel.loginResult.observe(this) { result ->
             handleLoadingState(false)
             when (result) {
-                is LoginRegisterViewModel.AuthResult.Success -> {
-                    showToast(getString(R.string.login_success))
-                    // 跳转到主页面
-                    navigateToMain()
-                    finish()
-                }
+                    is LoginRegisterViewModel.AuthResult.Success -> {
+                        showToast(getString(R.string.login_success))
+                        // 跳转到主页面
+                        navigateToMain()
+                    }
 
                 is LoginRegisterViewModel.AuthResult.Error -> {
                     handleError(result.exception)
                 }
-
-                else -> {}
             }
         }
 
-        viewModel.registerResult.observe(this) { result ->
+        viewModel.registerResult.observe(this) {
             handleLoadingState(false)
-            when (result) {
+            when (it) {
                 is LoginRegisterViewModel.AuthResult.Success -> {
                     showToast(getString(R.string.register_success))
-                    // 自动登录或跳转到登录页面
+                    // 注册成功后自动切换到登录模式
                     toggleMode(true)
                 }
 
                 is LoginRegisterViewModel.AuthResult.Error -> {
-                    handleError(result.exception)
+                    handleError(it.exception)
                 }
-
-                else -> {}
             }
         }
 
@@ -267,7 +262,8 @@ class LoginRegisterActivity : BaseLogicActivity<ActivityLoginRegisterBinding>() 
     }
 
     private fun navigateToMain() {
-        navigateTo(MainActivity::class.java)
+        // 跳转到主页面并关闭当前Activity
+        navigateTo(MainActivity::class.java, finishCurrent = true)
     }
 
     private fun performWechatLogin() {
