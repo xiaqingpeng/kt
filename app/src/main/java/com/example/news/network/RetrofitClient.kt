@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
     // 真机通过 adb reverse 访问宿主机：127.0.0.1；必须以 / 结尾
-    private const val BASE_URL = "http://127.0.0.1:7001/"
+    private const val BASE_URL = "http://120.48.95.51:7001/"
 
     private val loggingInterceptor: HttpLoggingInterceptor by lazy {
         HttpLoggingInterceptor().apply {

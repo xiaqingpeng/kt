@@ -1,18 +1,17 @@
 package com.example.news.viewmodel
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.news.api.AuthApiService
-import com.example.news.api.AuthResponse
 import com.example.news.api.LoginRequest
 import com.example.news.api.RegisterRequest
 import com.example.news.manager.LoginManager
 import com.example.news.manager.ValidatorManager
 import com.example.news.network.RetrofitClient
-import com.example.news.network.TokenStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -121,6 +120,10 @@ class LoginRegisterViewModel : ViewModel() {
                 if (response.isSuccessful) {
                     val authResponse = response.body()
                     if (authResponse != null) {
+
+                        // 打印完整的authResponse数据
+                        Log.d("LoginDebug", "AuthResponse: $authResponse")
+
                         // 根据API返回的code判断成功与否，code=0表示成功
                         if (authResponse.code == 0) {
                             _registerResult.postValue(AuthResult.Success(authResponse))
