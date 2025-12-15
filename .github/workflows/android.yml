@@ -38,7 +38,7 @@ jobs:
         host: ${{ secrets.SERVER_HOST }}
         username: ${{ secrets.SERVER_USERNAME }}
         password: ${{ secrets.SERVER_PASSWORD }}
-        source: "app/build/outputs/apk/release/app-release.apk"
+        source: "app/build/outputs/apk/release/app-release-unsigned.apk"
         target: "/var/www/html/apk"
         overwrite: true
 
@@ -48,7 +48,7 @@ jobs:
         echo "<body>" >> download.html
         echo "<h1>Android App Download</h1>" >> download.html
         echo "<p>Click below to download the latest APK:</p>" >> download.html
-        echo "<a href='app-release.apk' download>Download APK</a>" >> download.html
+        echo "<a href='app-release-unsigned.apk' download>Download APK</a>" >> download.html
         echo "</body>" >> download.html
         echo "</html>" >> download.html
 
