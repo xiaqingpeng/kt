@@ -66,3 +66,24 @@ jobs:
           echo "\n=== Checking file permissions ==="
           ls -lh /var/www/html/*.apk 2>/dev/null || echo "No APK files found"
           ls -lh /var/www/html/download.html 2>/dev/null || echo "No HTML file found"
+          
+          echo "\n=== Checking directory permissions ==="
+          stat -c "%a %U %G %n" /var/www /var/www/html
+          
+          echo "\n=== Checking Nginx configuration ==="
+          cat /etc/nginx/sites-available/default 2>/dev/null || echo "No default configuration found"
+          
+          echo "\n=== Testing file accessibility ==="
+          if [ -f /var/www/html/app-release-unsigned.apk ]; then
+            echo "APK file exists! Testing read access..."
+            head -c 50 /var/www/html/app-release-unsigned.apk | xxd | head -5
+          else
+            echo "ERROR: APK file not found!"
+            
+            echo "\n=== Checking upload target directory ==="
+            if [ ! -d /var/www/html ]; then
+              echo "Creating /var/www/html directory..."
+              mkdir -p /var/www/html
+              chmod 755 /var/www/html
+            fi
+          fi
