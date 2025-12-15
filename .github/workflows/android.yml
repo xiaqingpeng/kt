@@ -42,6 +42,9 @@ jobs:
         if [ -f "app/build/outputs/apk/release/app-release-unsigned.apk" ]; then
           echo "APK file found at: app/build/outputs/apk/release/app-release-unsigned.apk"
           echo "APK file size: $(ls -lh app/build/outputs/apk/release/app-release-unsigned.apk | awk '{print $5}')"
+          # Copy APK to root directory for simpler upload
+          cp app/build/outputs/apk/release/app-release-unsigned.apk ./
+          echo "APK file copied to root directory: $(ls -lh app-release-unsigned.apk)"
         else
           echo "ERROR: APK file not found!"
           exit 1
@@ -63,7 +66,7 @@ jobs:
         host: ${{ secrets.SERVER_HOST }}
         username: ${{ secrets.SERVER_USERNAME }}
         password: ${{ secrets.SERVER_PASSWORD }}
-        source: "app/build/outputs/apk/release/app-release-unsigned.apk"
+        source: "app-release-unsigned.apk"
         target: "/var/www/html"
         overwrite: true
       
