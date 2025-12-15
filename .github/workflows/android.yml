@@ -27,11 +27,26 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
-    - name: Build Release APK
-      run: ./gradlew assembleRelease
+    - name: Build APK
+      run: ./gradlew assembleRelease --no-build-cache
 
-    - name: Check APK file location
-      run: find app/build -name "*.apk" | sort
+    - name: Check Generated APK File
+      run: |
+        echo "=== Looking for generated APK files ==="
+        find . -name "*.apk" -type f | grep -v "build-cache" | sort
+        
+        echo "\n=== Checking app/build/outputs/apk/release directory ==="
+        ls -la app/build/outputs/apk/release
+        
+        echo "\n=== Verifying APK file exists ==="
+        if [ -f "app/build/outputs/apk/release/app-release-unsigned.apk" ]; then
+          echo "APK file found at: app/build/outputs/apk/release/app-release-unsigned.apk"
+          cp app/build/outputs/apk/release/app-release-unsigned.apk ./
+          echo "APK file copied to root directory: $(ls -lh app-release-unsigned.apk)"
+        else
+          echo "ERROR: APK file not found!"
+          exit 1
+        fi
 
     - name: Create Download HTML
       run: |
@@ -43,13 +58,13 @@ jobs:
         echo "</body>" >> download.html
         echo "</html>" >> download.html
 
-    - name: Upload Files to Server
-      uses: appleboy/scp-action@v0.1.4
+    - name: Upload APK and HTML to Server
+      uses: easingthemes/ssh-deploy@v2.1.5
       with:
         host: ${{ secrets.SERVER_HOST }}
         username: ${{ secrets.SERVER_USERNAME }}
         password: ${{ secrets.SERVER_PASSWORD }}
-        source: "app/build/outputs/apk/release/app-release-unsigned.apk,download.html"
+        source: "app-release-unsigned.apk,download.html"
         target: "/var/www/html"
         overwrite: true
 
