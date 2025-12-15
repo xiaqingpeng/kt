@@ -73,10 +73,17 @@ jobs:
           echo "\n=== Checking Nginx configuration ==="
           cat /etc/nginx/sites-available/default 2>/dev/null || echo "No default configuration found"
           
+          echo "\n=== Creating test file ==="
+          echo "This is a test file" > /var/www/html/test.txt
+          chmod 644 /var/www/html/test.txt
+          echo "Test file created: $(ls -lh /var/www/html/test.txt)"
+          
           echo "\n=== Testing file accessibility ==="
           if [ -f /var/www/html/app-release-unsigned.apk ]; then
             echo "APK file exists! Testing read access..."
             head -c 50 /var/www/html/app-release-unsigned.apk | xxd | head -5
+            chmod 644 /var/www/html/app-release-unsigned.apk
+            echo "APK file permissions updated to 644"
           else
             echo "ERROR: APK file not found!"
             
@@ -87,3 +94,6 @@ jobs:
               chmod 755 /var/www/html
             fi
           fi
+          
+          echo "\n=== Final directory contents ==="
+          ls -la /var/www/html
