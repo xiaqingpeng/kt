@@ -29,6 +29,9 @@ jobs:
     - name: Build Release APK
       run: ./gradlew assembleRelease
 
+    - name: Check APK file location
+      run: find app/build -name "*.apk" | sort
+
     - name: Upload APK to Server
       uses: appleboy/scp-action@v0.1.4
       with:
