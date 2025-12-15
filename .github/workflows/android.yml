@@ -39,7 +39,7 @@ jobs:
         username: ${{ secrets.SERVER_USERNAME }}
         password: ${{ secrets.SERVER_PASSWORD }}
         source: "app/build/outputs/apk/release/app-release-unsigned.apk"
-        target: "/var/www/html/apk"
+        target: "/var/www/html"
         overwrite: true
 
     - name: Create Download HTML
