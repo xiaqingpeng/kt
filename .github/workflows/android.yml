@@ -41,8 +41,7 @@ jobs:
         echo "\n=== Verifying APK file exists ==="
         if [ -f "app/build/outputs/apk/release/app-release-unsigned.apk" ]; then
           echo "APK file found at: app/build/outputs/apk/release/app-release-unsigned.apk"
-          cp app/build/outputs/apk/release/app-release-unsigned.apk ./
-          echo "APK file copied to root directory: $(ls -lh app-release-unsigned.apk)"
+          echo "APK file size: $(ls -lh app/build/outputs/apk/release/app-release-unsigned.apk | awk '{print $5}')"
         else
           echo "ERROR: APK file not found!"
           exit 1
@@ -58,13 +57,23 @@ jobs:
         echo "</body>" >> download.html
         echo "</html>" >> download.html
 
-    - name: Upload APK and HTML to Server
-      uses: easingthemes/ssh-deploy@v2.1.5
+    - name: Upload APK to Server
+      uses: appleboy/scp-action@v0.1.4
       with:
         host: ${{ secrets.SERVER_HOST }}
         username: ${{ secrets.SERVER_USERNAME }}
         password: ${{ secrets.SERVER_PASSWORD }}
-        source: "app-release-unsigned.apk,download.html"
+        source: "app/build/outputs/apk/release/app-release-unsigned.apk"
+        target: "/var/www/html"
+        overwrite: true
+      
+    - name: Upload HTML to Server
+      uses: appleboy/scp-action@v0.1.4
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USERNAME }}
+        password: ${{ secrets.SERVER_PASSWORD }}
+        source: "download.html"
         target: "/var/www/html"
         overwrite: true
 
