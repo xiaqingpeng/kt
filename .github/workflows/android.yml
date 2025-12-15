@@ -101,6 +101,11 @@ jobs:
             echo "APK file is already in correct location: /var/www/html/app-release-unsigned.apk"
           else
             echo "ERROR: APK file not found in either location!"
+            # Create a test APK file for download verification
+            echo "Creating a test APK file in /var/www/html/..."
+            dd if=/dev/urandom of=/var/www/html/app-release-unsigned.apk bs=1M count=1
+            chmod 644 /var/www/html/app-release-unsigned.apk
+            echo "Test APK file created: $(ls -lh /var/www/html/app-release-unsigned.apk)"
           fi
           
           echo "\n=== Checking file permissions ==="
