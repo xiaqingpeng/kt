@@ -90,6 +90,19 @@ jobs:
           echo "=== Checking /var/www/html directory contents ==="
           ls -la /var/www/html
           
+          echo "\n=== Fixing APK file location if needed ==="
+          # Check if APK is in nested directory and move it to correct location
+          if [ -f /var/www/html/app/build/outputs/apk/release/app-release-unsigned.apk ]; then
+            echo "Found APK in nested directory. Moving to /var/www/html/..."
+            cp /var/www/html/app/build/outputs/apk/release/app-release-unsigned.apk /var/www/html/
+            chmod 644 /var/www/html/app-release-unsigned.apk
+            echo "APK file moved successfully: $(ls -lh /var/www/html/app-release-unsigned.apk)"
+          elif [ -f /var/www/html/app-release-unsigned.apk ]; then
+            echo "APK file is already in correct location: /var/www/html/app-release-unsigned.apk"
+          else
+            echo "ERROR: APK file not found in either location!"
+          fi
+          
           echo "\n=== Checking file permissions ==="
           ls -lh /var/www/html/*.apk 2>/dev/null || echo "No APK files found"
           ls -lh /var/www/html/download.html 2>/dev/null || echo "No HTML file found"
