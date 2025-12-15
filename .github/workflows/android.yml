@@ -3,13 +3,11 @@ name: Android CI/CD
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
-  build:
+  build-and-upload:
     runs-on: ubuntu-latest
-
+    
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -22,6 +20,9 @@ jobs:
 
     - name: Set up Android SDK
       uses: android-actions/setup-android@v3
+      with:
+        api-level: 35
+        build-tools: 35.0.0
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
@@ -31,16 +32,6 @@ jobs:
 
     - name: Check APK file location
       run: find app/build -name "*.apk" | sort
-
-    - name: Upload APK to Server
-      uses: appleboy/scp-action@v0.1.4
-      with:
-        host: ${{ secrets.SERVER_HOST }}
-        username: ${{ secrets.SERVER_USERNAME }}
-        password: ${{ secrets.SERVER_PASSWORD }}
-        source: "app/build/outputs/apk/release/app-release-unsigned.apk"
-        target: "/var/www/html"
-        overwrite: true
 
     - name: Create Download HTML
       run: |
@@ -52,13 +43,13 @@ jobs:
         echo "</body>" >> download.html
         echo "</html>" >> download.html
 
-    - name: Upload HTML to Server
+    - name: Upload Files to Server
       uses: appleboy/scp-action@v0.1.4
       with:
         host: ${{ secrets.SERVER_HOST }}
         username: ${{ secrets.SERVER_USERNAME }}
         password: ${{ secrets.SERVER_PASSWORD }}
-        source: "download.html"
+        source: "app/build/outputs/apk/release/app-release-unsigned.apk,download.html"
         target: "/var/www/html"
         overwrite: true
 
@@ -69,22 +60,9 @@ jobs:
         username: ${{ secrets.SERVER_USERNAME }}
         password: ${{ secrets.SERVER_PASSWORD }}
         script: |
-          echo "=== Checking Nginx configuration ==="
-          cat /etc/nginx/sites-available/default
-          
-          echo "\n=== Checking /var/www directory structure ==="
-          ls -la /var/www
-          
-          echo "\n=== Checking /var/www/html directory contents ==="
+          echo "=== Checking /var/www/html directory contents ==="
           ls -la /var/www/html
           
-          echo "\n=== Checking APK file size ==="
-          if [ -f /var/www/html/app-release-unsigned.apk ]; then
-            echo "APK file found! Size: $(du -h /var/www/html/app-release-unsigned.apk)"
-          else
-            echo "ERROR: APK file not found in /var/www/html!"
-            
-            echo "\n=== Searching for APK file on server ==="
-            find /var/www -name "*.apk" -type f 2>/dev/null || echo "No APK files found in /var/www"
-            find /home -name "*.apk" -type f 2>/dev/null || echo "No APK files found in /home"
-          fi
+          echo "\n=== Checking file permissions ==="
+          ls -lh /var/www/html/*.apk 2>/dev/null || echo "No APK files found"
+          ls -lh /var/www/html/download.html 2>/dev/null || echo "No HTML file found"
