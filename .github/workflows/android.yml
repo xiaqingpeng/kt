@@ -69,11 +69,22 @@ jobs:
         username: ${{ secrets.SERVER_USERNAME }}
         password: ${{ secrets.SERVER_PASSWORD }}
         script: |
-          echo "Checking /var/www/html directory contents..."
+          echo "=== Checking Nginx configuration ==="
+          cat /etc/nginx/sites-available/default
+          
+          echo "\n=== Checking /var/www directory structure ==="
+          ls -la /var/www
+          
+          echo "\n=== Checking /var/www/html directory contents ==="
           ls -la /var/www/html
-          echo "Checking APK file size..."
+          
+          echo "\n=== Checking APK file size ==="
           if [ -f /var/www/html/app-release-unsigned.apk ]; then
             echo "APK file found! Size: $(du -h /var/www/html/app-release-unsigned.apk)"
           else
-            echo "ERROR: APK file not found!"
+            echo "ERROR: APK file not found in /var/www/html!"
+            
+            echo "\n=== Searching for APK file on server ==="
+            find /var/www -name "*.apk" -type f 2>/dev/null || echo "No APK files found in /var/www"
+            find /home -name "*.apk" -type f 2>/dev/null || echo "No APK files found in /home"
           fi
